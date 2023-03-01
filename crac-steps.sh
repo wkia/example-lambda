@@ -20,7 +20,11 @@ dojlink() {
 }
 
 s00_init() {
-	curl -L -o aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.3/aws-lambda-rie-$(uname -m)
+	ARCH=`uname -m`
+	if [ "aarch64" == $ARCH ]; then
+		ARCH="arm64"
+	fi
+	curl -L -o aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.3/aws-lambda-rie-$ARCH
 	chmod +x aws-lambda-rie
 
 	echo
