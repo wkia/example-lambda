@@ -27,10 +27,12 @@ COPY prepare-jdk.cmd.sh /
 COPY target/classes /function
 COPY target/dependency/* /function/lib/
 
-RUN /prepare-jdk.cmd.sh ; \
+RUN export ARCH=$(uname -m); \
+	/prepare-jdk.cmd.sh ; \
 	cd /function/lib; /jdk/bin/jar -x -f aws-lambda-java-runtime-interface-client*.jar \
-		aws-lambda-runtime-interface-client.musl.so \
-		aws-lambda-runtime-interface-client.glibc.so
+		${ARCH}/aws-lambda-runtime-interface-client.musl.so \
+		${ARCH}/aws-lambda-runtime-interface-client.glibc.so; \
+		mv ${ARCH}/* .; rm -r ${ARCH}
 
 WORKDIR /function
 
